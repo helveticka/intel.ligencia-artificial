@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 
 from base import agent, entorn
-from monedes import AccionsMoneda
+from monedes.joc import AccionsMoneda
 
 SOLUCIO = " XXXC"
 

@@ -6,7 +6,6 @@ ClauPercepcio:
     PARETS = 2
 """
 
-
 from base import entorn
 from tictac import joc
 

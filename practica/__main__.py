@@ -2,7 +2,7 @@ from practica import agent, joc
 
 
 def main():
-    mida = (10, 10)
+    mida = (12, 12)
 
     agents = [
         agent.Viatger("Agent 1", mida_taulell=mida),
