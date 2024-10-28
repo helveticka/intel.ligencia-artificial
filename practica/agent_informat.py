@@ -1,10 +1,12 @@
+from queue import PriorityQueue
+
 from practica import joc
 from practica.joc import Accions
 from practica.estat import Estat
 
-class ViatgerProfunditat(joc.Viatger):
-    def _init_(self, *args, **kwargs):
-        super(ViatgerProfunditat, self)._init_(*args, **kwargs)
+class ViatgerInformat(joc.Viatger):
+    def __init__(self, *args, **kwargs):
+        super(ViatgerInformat, self).__init__(*args, **kwargs)
         self.__oberts = None
         self.__tancats = None
         self.__accions = None
@@ -12,38 +14,33 @@ class ViatgerProfunditat(joc.Viatger):
     def pinta(self, display):
         pass
 
-
     def cerca(self, estat_inicial: Estat) -> bool:
-        self.__oberts = [estat_inicial]
+        self.__oberts = PriorityQueue()
         self.__tancats = set()
-        trobat = False
 
-        actual = None
-        while self.__oberts:
-            actual = self.__oberts.pop(-1)
+        self.__oberts.put(estat_inicial)
+        while not self.__oberts.empty():
+            actual = self.__oberts.get()
             if actual in self.__tancats:
                 continue
             if actual.es_meta():
                 self.__accions = actual.accions
-                trobat = True
-                break
-
-            for f in actual.genera_fills():
-                self.__oberts.append(f)
-
+                return True
+            estats_fills = actual.genera_fills()
+            for f in estats_fills:
+                self.__oberts.put(f)
             self.__tancats.add(actual)
-
-        return trobat
+        return False
 
     def actua(self, percepcio: dict) -> Accions | tuple[Accions, str]:
         if self.__accions is None:
             estat_inicial = Estat(
-                nom_agent=self.nom,
-                parets=percepcio['PARETS'],
-                midax=len(percepcio['TAULELL']),
-                miday=len(percepcio['TAULELL'][0]),
-                desti=percepcio['DESTI'],
-                agents=percepcio['AGENTS'],
+                nom = self.nom,
+                parets = percepcio['PARETS'],
+                taulell_x = len(percepcio['TAULELL']),
+                taulell_y = len(percepcio['TAULELL'][0]),
+                desti = percepcio['DESTI'],
+                agents = percepcio['AGENTS'],
             )
 
             self.cerca(estat_inicial)
