@@ -14,11 +14,16 @@ class ViatgerProfunditat(joc.Viatger):
 
 
     def cerca(self, estat_inicial: Estat) -> bool:
+        #Inicialitzam les estructures necesàries per gestionar els estats oberts (amb la inserció de l'estat inicial)
+        #i tancats
         self.__oberts = [estat_inicial]
         self.__tancats = set()
         trobat = False
 
         actual = None
+        #Mentre hi hagui estats a __oberts, comprobam:
+        #   - Si l'estat actual està visitat (passam)
+        #   - Si l'estat actual és la meta (break y possam trobat a True)
         while self.__oberts:
             actual = self.__oberts.pop(-1)
             if actual in self.__tancats:
@@ -28,14 +33,17 @@ class ViatgerProfunditat(joc.Viatger):
                 trobat = True
                 break
 
+            #Per cada fill de la llista que genera el mètode, l'insertam a __oberts.
             for f in actual.genera_fills():
                 self.__oberts.append(f)
 
+            #Consideram l'estat actual visitat i el tancam.
             self.__tancats.add(actual)
 
         return trobat
 
     def actua(self, percepcio: dict) -> Accions | tuple[Accions, str]:
+        #Si no hi ha accions a aquesta instancia, passam l'estat inicial al mètode de cerca
         if self.__accions is None:
             estat_inicial = Estat(
                 nom=self.nom,

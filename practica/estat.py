@@ -5,6 +5,8 @@ from practica.joc import Accions
 
 
 class Estat:
+    #Tots el possibles moviments. Primer els moviments que més canvis poden provocar,
+    #llavors els moviments més simples i, per acabar, els moviments més complexos
     moviments_possibles = [
         (Accions.POSAR_PARET, "N"),
         (Accions.POSAR_PARET, "S"),
@@ -20,17 +22,17 @@ class Estat:
         (Accions.BOTAR, "O"),
     ]
 
-    def __init__(self, nom: str, parets: Set[Tuple[int, int]], taulell_x: int, taulell_y: int, desti: Tuple[int, int], agents: Dict[str, Tuple[int, int]], accions = []):
+    def __init__(self, nom: str, parets: Set[Tuple[int, int]], taulell_x: int, taulell_y: int, meta: Tuple[int, int], agents: Dict[str, Tuple[int, int]], accions = []):
         self._nom = nom
         self._parets = parets
         self._taulell_x = taulell_x
         self._taulell_y = taulell_y
-        self._desti = desti
+        self._meta = meta
         self._agents = agents
         self._posicio = self._agents[self._nom]
         self.accions = accions
-        self._invalid = False
 
+    #Realitza la funció Hash identificant les parets i els agents per aquest estat
     def __hash__(self):
         parets_hash = hash(tuple(self._parets))
         agents_hash = hash(tuple(sorted((c, v) for c, v in self._agents.items())))
@@ -40,32 +42,22 @@ class Estat:
         return hash(self) == hash(other)
 
     def es_meta(self) -> bool:
-        return self._posicio[0] == self._desti[0] and self._posicio[1] == self._desti[1]
+        #Comprobam si la posició és la mateixa que la de la meta tant a x com a y.
+        return self._posicio[0] == self._meta[0] and self._posicio[1] == self._meta[1]
 
     def es_valid(self) -> bool:
-        """ Mètode per detectar si un estat és valid
-
-        Un estat es vàlid si no n'hi ha cap paret ni agent fora del taulell ni cap agent sobre una paret o altre agent.
-
-        Returns:
-            Booleà indicant si es vàlid o no
-        """
-        if self._posicio[0] < 0 or self._posicio[0] >= self._taulell_x or self._posicio[1] < 0 or self._posicio[1] >= self._taulell_y: #está fora del taulell
+        #Miram si la posició està fora del limits del taulell. Si ho està, retornam False
+        if self._posicio[0] < 0 or self._posicio[0] >= self._taulell_x or self._posicio[1] < 0 or self._posicio[1] >= self._taulell_y:
             return False
 
-        if self._invalid: # hi ha parets duplicades, s'actualitza en crear l'estat
-            return False
-
-        for x, y in self._parets:
-            if x < 0 or x >= self._taulell_x or y < 0 or y >= self._taulell_y: # hi ha parets fora de rang
+        #Per totes les coordenades de les parets comprobam si:
+        #   - L'agent es troba sobre una paret
+        #   - Si hi ha una paret sobre la meta.
+        #Tornant False si es compleix alguna d'aquestes comprobacions.
+        for coordx, coordy in self._parets:
+            if coordx == self._posicio[0] and coordy == self._posicio[1]:
                 return False
-            if x == self._posicio[0] and y == self._posicio[1]: # l'agent es troba sobre una paret
-                return False
-            if x == self._desti[0] and y == self._desti[1]: # hi ha una paret sobre la meta
-                return False
-
-        for nom, posicio in self._agents.items():
-            if self._nom != nom and self._posicio == posicio: # l'agent está damunt un altre
+            if coordx == self._meta[0] and coordy == self._meta[1]:
                 return False
 
         return True
@@ -122,6 +114,8 @@ class Estat:
             nou_estat._posicio = (x, y)
 
     def __lt__(self, other):
+        #Ens ajuda a comparar entre el valor d'aquest estat amb el que es troba dins la PriorityQueue
+        #tenguent en compte el valor (heurística + cost)
         if self.calcular_valor() == other.calcular_valor():
             return self.heuristica() < other.heuristica()
 
@@ -131,7 +125,8 @@ class Estat:
         return self.heuristica() + self.cost()
 
     def heuristica(self) -> int:
-        return abs(self._posicio[0] - self._desti[0]) + abs(self._posicio[1] - self._desti[1])
+        #L'heurística que feim servir es la distància de Manhattan
+        return abs(self._posicio[0] - self._meta[0]) + abs(self._posicio[1] - self._meta[1])
 
     def cost(self) -> int:
         costs = {
