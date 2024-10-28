@@ -71,57 +71,55 @@ class Estat:
         return True
 
     def genera_fills(self) -> list:
-        """ Mètode per generar els estats fills.
-
-        Genera tots els estats fills a partir de l'estat actual.
-
-        Returns:
-            Llista d'estats fills generats.
-        """
-
-        desp_moure = {
+        moure = {
             "N": (0, -1),
             "S": (0, 1),
             "E": (1, 0),
             "O": (-1, 0)
         }
-        desp_botar = {
+        botar = {
             "N": (0, -2),
             "S": (0, 2),
             "E": (2, 0),
             "O": (-2, 0)
         }
 
-        estats_generats = []
-
+        estats_fills = []
         for moviment in self.moviments_possibles:
-            nou_estat = copy.deepcopy(self)
-            nou_estat.pare = self
-            nou_estat.accions.append(moviment)
+            fill = copy.deepcopy(self)
+            fill.pare = self
+            fill.accions.append(moviment)
 
-            # Calcular x, y
-            desp = (0, 0)
-            if moviment[0] == Accions.BOTAR:
-                desp = desp_botar.get(moviment[1], (0, 0))
-            elif moviment[0] in (Accions.MOURE, Accions.POSAR_PARET):
-                desp = desp_moure.get(moviment[1], (0, 0))
-            x, y = self._posicio[0] + desp[0], self._posicio[1] + desp[1]
+            x, y = self.calcular_posicio(moviment, botar, moure)
+            self.aplicar_canvi(fill, x, y, moviment)
 
-            # Fer canvis
-            if moviment[0] == Accions.POSAR_PARET:
-                if (x, y) in nou_estat._parets:
-                    nou_estat._invalid = True
-                else:
-                    nou_estat._parets.add((x, y))
+            if fill.es_valid():
+                estats_fills.append(fill)
 
-            elif moviment[0] in (Accions.MOURE, Accions.BOTAR):
-                nou_estat._posicio = (x, y)
-                nou_estat._agents[nou_estat._nom] = (x, y)
+        return estats_fills
 
-            if nou_estat.es_valid():
-                estats_generats.append(nou_estat)
+    def calcular_posicio(self, moviment, botar, moure):
+        desp = (0, 0)
 
-        return estats_generats
+        if moviment[0] == Accions.BOTAR:
+            desp = botar.get(moviment[1], (0, 0))
+        elif moviment[0] in (Accions.MOURE, Accions.POSAR_PARET):
+            desp = moure.get(moviment[1], (0, 0))
+
+        x = self._posicio[0] + desp[0]
+        y = self._posicio[1] + desp[1]
+
+        return x, y
+
+    def aplicar_canvi(self, nou_estat, x, y, moviment):
+        if moviment[0] == Accions.POSAR_PARET:
+            if (x, y) in nou_estat._parets:
+                nou_estat._invalid = True
+            else:
+                nou_estat._parets.add((x, y))
+        elif moviment[0] in (Accions.MOURE, Accions.BOTAR):
+            nou_estat._agents[nou_estat._nom] = (x, y)
+            nou_estat._posicio = (x, y)
 
     def __lt__(self, other):
         if self.calcular_valor() == other.calcular_valor():
