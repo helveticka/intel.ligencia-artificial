@@ -50,10 +50,10 @@ class Estat:
         if self._posicio[0] < 0 or self._posicio[0] >= self._taulell_x or self._posicio[1] < 0 or self._posicio[1] >= self._taulell_y:
             return False
 
-        #Per totes les coordenades de les parets comprobam si:
+        #Per totes les coordenades de les parets comprovam si:
         #   - L'agent es troba sobre una paret
         #   - Si hi ha una paret sobre la meta.
-        #Tornant False si es compleix alguna d'aquestes comprobacions.
+        #Tornant False si es compleix alguna d'aquestes comprovacions.
         for coordx, coordy in self._parets:
             if coordx == self._posicio[0] and coordy == self._posicio[1]:
                 return False

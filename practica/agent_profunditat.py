@@ -3,6 +3,7 @@ from practica.joc import Accions
 from practica.estat import Estat
 
 class ViatgerProfunditat(joc.Viatger):
+
     def __init__(self, *args, **kwargs):
         super(ViatgerProfunditat, self).__init__(*args, **kwargs)
         self.__oberts = None
@@ -12,7 +13,6 @@ class ViatgerProfunditat(joc.Viatger):
     def pinta(self, display):
         pass
 
-
     def cerca(self, estat_inicial: Estat) -> bool:
         #Inicialitzam les estructures necesàries per gestionar els estats oberts (amb la inserció de l'estat inicial)
         #i tancats
@@ -21,7 +21,7 @@ class ViatgerProfunditat(joc.Viatger):
         trobat = False
 
         actual = None
-        #Mentre hi hagui estats a __oberts, comprobam:
+        #Mentre hi hagui estats a __oberts, comprovam:
         #   - Si l'estat actual està visitat (passam)
         #   - Si l'estat actual és la meta (break y possam trobat a True)
         while self.__oberts:
@@ -50,7 +50,7 @@ class ViatgerProfunditat(joc.Viatger):
                 parets=percepcio['PARETS'],
                 taulell_x=len(percepcio['TAULELL']),
                 taulell_y=len(percepcio['TAULELL'][0]),
-                desti=percepcio['DESTI'],
+                meta=percepcio['DESTI'],
                 agents=percepcio['AGENTS'],
             )
 

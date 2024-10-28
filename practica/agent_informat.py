@@ -5,6 +5,7 @@ from practica.joc import Accions
 from practica.estat import Estat
 
 class ViatgerInformat(joc.Viatger):
+
     def __init__(self, *args, **kwargs):
         super(ViatgerInformat, self).__init__(*args, **kwargs)
         self.__oberts = None
@@ -20,8 +21,9 @@ class ViatgerInformat(joc.Viatger):
         self.__oberts = PriorityQueue()
         self.__tancats = set()
 
+        actual = None
         self.__oberts.put(estat_inicial)
-        #Mentre __oberts no sigui buit, comprobam:
+        #Mentre __oberts no sigui buit, comprovam:
         #   - Si l'estat actual està visitat (passam)
         #   - Si l'estat actual és la meta (break y retornam True)
         while not self.__oberts.empty():
@@ -51,7 +53,7 @@ class ViatgerInformat(joc.Viatger):
                 parets = percepcio['PARETS'],
                 taulell_x = len(percepcio['TAULELL']),
                 taulell_y = len(percepcio['TAULELL'][0]),
-                desti = percepcio['DESTI'],
+                meta = percepcio['DESTI'],
                 agents = percepcio['AGENTS'],
             )
 
