@@ -3,8 +3,8 @@ from practica.joc import Accions
 from practica.estat import Estat
 
 class ViatgerProfunditat(joc.Viatger):
-    def _init_(self, *args, **kwargs):
-        super(ViatgerProfunditat, self)._init_(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ViatgerProfunditat, self).__init__(*args, **kwargs)
         self.__oberts = None
         self.__tancats = None
         self.__accions = None
@@ -38,10 +38,10 @@ class ViatgerProfunditat(joc.Viatger):
     def actua(self, percepcio: dict) -> Accions | tuple[Accions, str]:
         if self.__accions is None:
             estat_inicial = Estat(
-                nom_agent=self.nom,
+                nom=self.nom,
                 parets=percepcio['PARETS'],
-                midax=len(percepcio['TAULELL']),
-                miday=len(percepcio['TAULELL'][0]),
+                taulell_x=len(percepcio['TAULELL']),
+                taulell_y=len(percepcio['TAULELL'][0]),
                 desti=percepcio['DESTI'],
                 agents=percepcio['AGENTS'],
             )
