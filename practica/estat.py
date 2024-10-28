@@ -63,6 +63,7 @@ class Estat:
         return True
 
     def genera_fills(self) -> list:
+        #Plantetjam tots els possibles estats
         moure = {
             "N": (0, -1),
             "S": (0, 1),
@@ -77,15 +78,19 @@ class Estat:
         }
 
         estats_fills = []
+        #Per cada moviment dins moviments possibles, cream un fill i assignam el seu pare
         for moviment in self.moviments_possibles:
             fill = copy.deepcopy(self)
             fill.pare = self
             fill.accions.append(moviment)
 
+            #Comprovam la seva futura posició després del moviment
             x, y = self.calcular_posicio(moviment, botar, moure)
+            #Aplicam el canvi
             self.aplicar_canvi(fill, x, y, moviment)
 
             if fill.es_valid():
+                #Finalment, comprovam que el fill es vàlid i, si ho és, l'introduïm a la llista que retornarem.
                 estats_fills.append(fill)
 
         return estats_fills
@@ -93,17 +98,20 @@ class Estat:
     def calcular_posicio(self, moviment, botar, moure):
         desp = (0, 0)
 
+        #Depenent del moviment, guardam a desp el desplaçament que s'haurà de realitzar.
         if moviment[0] == Accions.BOTAR:
             desp = botar.get(moviment[1], (0, 0))
         elif moviment[0] in (Accions.MOURE, Accions.POSAR_PARET):
             desp = moure.get(moviment[1], (0, 0))
 
+        #S'aplica el desplaçament sobre la posició del estat.
         x = self._posicio[0] + desp[0]
         y = self._posicio[1] + desp[1]
 
         return x, y
 
     def aplicar_canvi(self, nou_estat, x, y, moviment):
+        #Aplica els canvis gràficament
         if moviment[0] == Accions.POSAR_PARET:
             if (x, y) in nou_estat._parets:
                 nou_estat._invalid = True
