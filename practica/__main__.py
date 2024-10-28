@@ -1,3 +1,5 @@
+#Autors: Harpo Joan Alberola i Marc Ferrer Fernández
+
 from practica import agent, joc, agent_profunditat, agent_informat
 
 def main():
