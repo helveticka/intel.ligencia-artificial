@@ -1,6 +1,7 @@
 import logging
 
 from reinforcement.agent import AgentQ
+from reinforcement.agentsarsa import AgentSARSA
 from reinforcement.joc import Laberint
 
 
@@ -12,7 +13,7 @@ def main():
     )  # Only show messages *equal to or above* this level
 
     game = Laberint()
-    agent = AgentQ(game)
+    agent = AgentSARSA(game)
     h, w, _ = agent.train(
         discount=0.90,
         exploration_rate=0.10,
