@@ -56,7 +56,7 @@ class Laberint(joc.Joc):
         maze=None,
         start_cell=(0, 0),
         exit_cell=(6, 6),
-        mostra_cami=False,
+        mostra_cami=True,
     ):
         """Create a new maze game
 
@@ -121,7 +121,7 @@ class Laberint(joc.Joc):
 
         return state["POS"], reward, status
 
-    def reset(self, start_cell=(0, 0)):
+    def reset(self, start_cell=(0, 6)):
         self.__previous_cell = self.__current_cell = start_cell
         self.__total_reward = 0.0  # accumulated reward
         self.__visited = set()  # a set() only stores unique values
