@@ -77,13 +77,6 @@ class AgentSARSA(AbstractModel):
         ]  # get index of the action(s) with the max value
         return self.environment.actions[random.choice(actions)]
 
-    def select_action(self, state, exploration_rate):
-        """Selecciona una acción usando política ε-greedy."""
-        if np.random.random() < exploration_rate:
-            return random.choice(self.environment.actions)
-        else:
-            return self.predict(state)
-
     def train(
             self,
             discount,
@@ -143,3 +136,10 @@ class AgentSARSA(AbstractModel):
 
         logging.info("episodes: {:d}".format(episode))
         return cumulative_reward_history, win_history, episode
+
+    def select_action(self, state, exploration_rate):
+        """Selecciona una acción usando política ε-greedy."""
+        if np.random.random() < exploration_rate:
+            return random.choice(self.environment.actions)
+        else:
+            return self.predict(state)
