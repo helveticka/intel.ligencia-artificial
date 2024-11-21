@@ -121,7 +121,7 @@ class Laberint(joc.Joc):
 
         return state["POS"], reward, status
 
-    def reset(self, start_cell=(0, 6)):
+    def reset(self, start_cell=(0, 0)):
         self.__previous_cell = self.__current_cell = start_cell
         self.__total_reward = 0.0  # accumulated reward
         self.__visited = set()  # a set() only stores unique values
