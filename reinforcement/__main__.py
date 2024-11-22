@@ -18,7 +18,7 @@ def main():
         discount=0.90,
         exploration_rate=0.10,
         learning_rate=0.6,
-        episodes=1000,
+        episodes=2000,
         stop_at_convergence=True,
     )
 

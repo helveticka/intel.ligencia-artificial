@@ -9,11 +9,12 @@ from reinforcement.joc import Status
 
 
 class AgentSARSA(AbstractModel):
-    """Tabular SARSA (State-Action-Reward-State-Action) prediction model.
+    """Model de predicció SARSA (State-Action-Reward-State-Action).
 
-    Similar to Q-learning but uses on-policy learning, meaning it updates the Q-table
-    based on the actual next action that will be taken, rather than the maximum Q-value
-    of the next state.
+    Similar a Q-learning però utilitza aprenentatge dins-política, el que significa
+    que actualitza la taula Q basant-se en l'acció següent real que es prendrà,
+    en lloc del valor Q màxim de l'estat següent.
+
     """
 
     default_check_convergence_every = (
@@ -27,7 +28,7 @@ class AgentSARSA(AbstractModel):
             game (Maze): Maze game object
             kwargs: model dependent init parameters
         """
-        super().__init__(game, name="QTableModel")
+        super().__init__(game, name="SARSAModel")
         self.Q = {}  # table with value for (state, action) combination
 
     def q(self, state):
@@ -45,8 +46,7 @@ class AgentSARSA(AbstractModel):
         return q_aprox
 
     def actua(self, percepcio) -> entorn.Accio | tuple[entorn.Accio, object]:
-        """Policy: choose the action with the highest value from the Q-table. Random choice if
-        multiple actions have the same (max) value.
+        """Policy: choose
 
         Args:
             percepcio: game state
@@ -64,8 +64,7 @@ class AgentSARSA(AbstractModel):
         pass
 
     def predict(self, state):
-        """Policy: choose the action with the highest value from the Q-table.
-        Random choice if multiple actions have the same (max) value.
+        """Policy: epsilon-greedy policy.
 
         :param np.ndarray state: game state
         :return int: selected action
@@ -90,39 +89,53 @@ class AgentSARSA(AbstractModel):
         win_history = []
 
         for episode in range(1, episodes + 1):
+            # Inicialitzar l'estat S
             state = self.environment.reset()
-            # Cambio principal 1: Seleccionar la primera acción al inicio del episodio
-            action = self.select_action(state, exploration_rate)
+            # Seleccionar l'acció derivada de la política epsilon-greedy
+            if np.random.random() < exploration_rate:
+                action = random.choice(self.environment.actions)
+            else:
+                action = self.predict(state)
 
             while True:
-                # Ejecutar la acción seleccionada
+                # Executar l'acció A i observar la recompensa R i el nou estat S'
                 next_state, reward, status = self.environment._aplica(action)
                 cumulative_reward += reward
 
-                # Cambio principal 2: Seleccionar la siguiente acción antes de actualizar Q
-                next_action = self.select_action(next_state, exploration_rate)
+                # Seleccionar la siguiente acción antes de actualizar Q
+                if np.random.random() < exploration_rate:
+                    next_action = random.choice(self.environment.actions)
+                else:
+                    next_action = self.predict(next_state)
 
-                # Asegurar que existe el valor para (estado, acción)
-                if (state, action) not in self.Q:
+                if (
+                        state,
+                        action,
+                ) not in self.Q.keys():  # ensure value exists for (state, action)
+                    # to avoid a KeyError
                     self.Q[(state, action)] = 0.0
 
-                # Asegurar que existe el valor para (siguiente_estado, siguiente_acción)
-                if (next_state, next_action) not in self.Q:
+                if (
+                        next_state,
+                        next_action,
+                ) not in self.Q.keys():  # ensure value exists for (next_state, next_action)
+                    # to avoid a KeyError
                     self.Q[(next_state, next_action)] = 0.0
 
-                # Cambio principal 3: Actualización SARSA
-                # En lugar de usar el máximo Q-valor del siguiente estado,
-                # usamos el Q-valor de la siguiente acción que realmente tomaremos
+                # Actualització segons SARSA
                 self.Q[(state, action)] = self.Q[(state, action)] + learning_rate * (
                         reward +
                         discount * self.Q[(next_state, next_action)] -
                         self.Q[(state, action)]
                 )
 
-                if status in (Status.WIN, Status.LOSE):
+                if status in (
+                        Status.WIN,
+                        Status.LOSE,
+                ):  # terminal state reached, stop episode
                     break
 
-                # Cambio principal 4: Actualizar estado y acción para el siguiente paso
+                # Actualitzar l'estat i l'acció
                 state = next_state
                 action = next_action
 
@@ -133,13 +146,17 @@ class AgentSARSA(AbstractModel):
                     episode, episodes, status.name, exploration_rate
                 )
             )
+        """
+            if episode % check_convergence_every == 0:
+                # check if the current model does win from all starting cells
+                # only possible if there is a finite number of starting states
+                w_all, win_rate = self.environment.check_win_all(self)
+                win_history.append((episode, win_rate))
+                if w_all is True and stop_at_convergence is True:
+                    logging.info("won from all start cells, stop learning")
+                    break
+        """
 
         logging.info("episodes: {:d}".format(episode))
-        return cumulative_reward_history, win_history, episode
 
-    def select_action(self, state, exploration_rate):
-        """Selecciona una acción usando política ε-greedy."""
-        if np.random.random() < exploration_rate:
-            return random.choice(self.environment.actions)
-        else:
-            return self.predict(state)
+        return cumulative_reward_history, win_history, episode

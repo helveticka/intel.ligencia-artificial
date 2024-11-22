@@ -266,7 +266,7 @@ class Laberint(joc.Joc):
         if (x, y) in self.__visited and self.__mostra_cami:
             pygame.draw.rect(
                 self._game_window,
-                pygame.Color(255, 235, 245),
+                pygame.Color(99, 165, 160),
                 pygame.Rect(x * 50, y * 50, 50, 50),
                 0,
             )

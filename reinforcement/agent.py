@@ -7,7 +7,6 @@ from base import entorn
 from reinforcement.abstractmodel import AbstractModel
 from reinforcement.joc import Status, Action
 
-
 class AgentQ(AbstractModel):
     """Tabular Q-learning prediction model.
 
