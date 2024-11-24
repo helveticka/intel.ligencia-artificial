@@ -102,7 +102,7 @@ class AgentSARSA(AbstractModel):
                 next_state, reward, status = self.environment._aplica(action)
                 cumulative_reward += reward
 
-                # Seleccionar la siguiente acción antes de actualizar Q
+                # Seleccionar la següent acció derivada de la política epsilon-greedy
                 if np.random.random() < exploration_rate:
                     next_action = random.choice(self.environment.actions)
                 else:
@@ -111,15 +111,15 @@ class AgentSARSA(AbstractModel):
                 if (
                         state,
                         action,
-                ) not in self.Q.keys():  # ensure value exists for (state, action)
-                    # to avoid a KeyError
+                ) not in self.Q.keys():  # assegurar que el valor existeix per cada (state, action)
+                    # per evitar un KeyError
                     self.Q[(state, action)] = 0.0
 
                 if (
                         next_state,
                         next_action,
-                ) not in self.Q.keys():  # ensure value exists for (next_state, next_action)
-                    # to avoid a KeyError
+                ) not in self.Q.keys():  # assegurar que el valor existeix per cada (next_state, next_action)
+                    # per evitar un KeyError
                     self.Q[(next_state, next_action)] = 0.0
 
                 # Actualització segons SARSA
@@ -132,7 +132,7 @@ class AgentSARSA(AbstractModel):
                 if status in (
                         Status.WIN,
                         Status.LOSE,
-                ):  # terminal state reached, stop episode
+                ):  # estat terminal assolit, aturar l'episodi
                     break
 
                 # Actualitzar l'estat i l'acció
