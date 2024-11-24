@@ -1,7 +1,6 @@
 import logging
 
-from reinforcement.agent import AgentQ
-from reinforcement.agentsarsa import AgentSARSA
+from reinforcement.agent import AgentQ, AgentSARSA
 from reinforcement.joc import Laberint
 
 
