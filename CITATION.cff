@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+authors:
+- family-names: "Ferrer"
+  given-names: "Marc"
+- family-names: "Joan"
+  given-names: "Harpo"
+title: "Pràctica final d'Intel·ligència Artificial"
+date-released: "2024"
+url: "https://github.com/helveticka/intel.ligencia-artificial"
