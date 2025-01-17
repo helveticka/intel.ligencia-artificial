@@ -1,27 +1,15 @@
-# Intel·ligència artificial (UIB)
-### 2024-2025
+# Intel·ligència Artificial
 
-En aquest repositori podreu trobar tots els exemples vists a classes.
+## Content
 
-## Instal·lació
+### P1: search 
 
-Per poder emprar aquests exemples necessitem primerament tenir un entorn de python amb les 
-llibreries instal·lades. Per fer-ho s'han de seguir les següents passes: 
 
-**Primer pas**: 
+### P2: reinforcement learning
 
-Descarregar el repositori.
-```
-     git clone https://github.com/miquelmn/ia_2024.git
-```
 
-**Segon pas**:
+### P3: machine learning 
 
-Instal·lar les llibreries.
-
-```
-    pip install -r requirements.txt
-```
 
 ## Authors
 Developed by [Marc Ferrer](https://github.com/Kow13) & [Harpo Joan](https://github.com/helveticka)
