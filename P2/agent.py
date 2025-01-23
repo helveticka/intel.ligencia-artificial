@@ -4,8 +4,8 @@ import random
 import numpy as np
 
 from base import entorn
-from reinforcement.abstractmodel import AbstractModel
-from reinforcement.joc import Status, Action
+from P2.abstractmodel import AbstractModel
+from P2.joc import Status, Action
 
 """Dins aquest fitxer agent.py es poden trobar les classes AgentQ i AgentSARSA,
 les quals es diferencien únicament pel mètode train que és el que hem modificat."""

@@ -1,7 +1,7 @@
 import random
 
-from practica import joc
-from practica.joc import Accions
+from P1 import joc
+from P1.joc import Accions
 
 
 class Viatger(joc.Viatger):

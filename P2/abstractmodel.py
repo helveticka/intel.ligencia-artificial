@@ -2,8 +2,6 @@
 """
 
 from abc import ABC, abstractmethod
-from base import agent
-
 
 class AbstractModel(ABC):
     def __init__(self, maze, name):

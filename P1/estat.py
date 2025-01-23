@@ -1,7 +1,7 @@
 import copy
 from typing import Tuple, Dict, Set
 
-from practica.joc import Accions
+from P1.joc import Accions
 
 
 class Estat:

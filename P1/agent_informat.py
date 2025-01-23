@@ -1,8 +1,8 @@
 from queue import PriorityQueue
 
-from practica import joc
-from practica.joc import Accions
-from practica.estat import Estat
+from P1 import joc
+from P1.joc import Accions
+from P1.estat import Estat
 
 class ViatgerInformat(joc.Viatger):
 

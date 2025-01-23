@@ -1,7 +1,7 @@
 import logging
 
-from reinforcement.agent import AgentQ, AgentSARSA
-from reinforcement.joc import Laberint
+from P2.agent import AgentQ, AgentSARSA
+from P2.joc import Laberint
 
 
 def main():
