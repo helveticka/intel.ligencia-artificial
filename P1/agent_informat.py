@@ -1,8 +1,11 @@
+#Autors: Harpo Joan Alberola i Marc Ferrer Fernández
+
 from queue import PriorityQueue
 
 from P1 import joc
 from P1.joc import Accions
 from P1.estat import Estat
+
 
 class ViatgerInformat(joc.Viatger):
 

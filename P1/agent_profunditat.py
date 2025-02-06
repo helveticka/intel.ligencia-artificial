@@ -1,6 +1,9 @@
+#Autors: Harpo Joan Alberola i Marc Ferrer Fernández
+
 from P1 import joc
 from P1.joc import Accions
 from P1.estat import Estat
+
 
 class ViatgerProfunditat(joc.Viatger):
 
@@ -21,9 +24,10 @@ class ViatgerProfunditat(joc.Viatger):
         trobat = False
 
         actual = None
-        #Mentre hi hagui estats a __oberts, comprovam:
+        #Mentre hi hagi estats a __oberts, comprovam:
         #   - Si l'estat actual està visitat (passam)
         #   - Si l'estat actual és la meta (break y possam trobat a True)
+
         while self.__oberts:
             actual = self.__oberts.pop(-1)
             if actual in self.__tancats:
@@ -57,6 +61,7 @@ class ViatgerProfunditat(joc.Viatger):
             self.cerca(estat_inicial)
 
         if self.__accions:
-            return self.__accions.pop(0)
+            accio = self.__accions.pop(0)
+            return accio
         else:
             return Accions.ESPERAR

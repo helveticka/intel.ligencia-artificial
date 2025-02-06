@@ -1,3 +1,5 @@
+#Autors: Harpo Joan Alberola i Marc Ferrer Fernández
+
 import copy
 from typing import Tuple, Dict, Set
 
@@ -8,10 +10,6 @@ class Estat:
     #Tots el possibles moviments. Primer els moviments que més canvis poden provocar,
     #llavors els moviments més simples i, per acabar, els moviments més complexos
     moviments_possibles = [
-        (Accions.POSAR_PARET, "N"),
-        (Accions.POSAR_PARET, "S"),
-        (Accions.POSAR_PARET, "E"),
-        (Accions.POSAR_PARET, "O"),
         (Accions.MOURE, "N"),
         (Accions.MOURE, "S"),
         (Accions.MOURE, "E"),
@@ -42,7 +40,7 @@ class Estat:
         return hash(self) == hash(other)
 
     def es_meta(self) -> bool:
-        #Comprobam si la posició és la mateixa que la de la meta tant a x com a y.
+        #Comprovam si la posició és la mateixa que la de la meta tant a x com a y.
         return self._posicio[0] == self._meta[0] and self._posicio[1] == self._meta[1]
 
     def es_valid(self) -> bool:
@@ -53,11 +51,14 @@ class Estat:
         #Per totes les coordenades de les parets comprovam si:
         #   - L'agent es troba sobre una paret
         #   - Si hi ha una paret sobre la meta.
+        #   - Si hi ha parets fora dels limits del tauler
         #Tornant False si es compleix alguna d'aquestes comprovacions.
         for coordx, coordy in self._parets:
             if coordx == self._posicio[0] and coordy == self._posicio[1]:
                 return False
             if coordx == self._meta[0] and coordy == self._meta[1]:
+                return False
+            if coordx < 0 or coordx >= self._taulell_x or coordy < 0 or coordy >= self._taulell_y:
                 return False
 
         return True
